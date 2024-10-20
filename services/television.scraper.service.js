@@ -40,18 +40,22 @@ async function fetchShows() {
             const titleElement = dom.window.document.querySelector('.col-lg-12.show-title');
             const descriptionElement = dom.window.document.querySelector('.col-lg-12.show-descr p');
             const videoLinkElements = dom.window.document.querySelectorAll('.popup-youtube');
-
+            
+            const postTitleElement = dom.window.document.querySelector('.single-vpost-content .single-vpost-title');
+            const postTitle = postTitleElement ? postTitleElement.textContent.trim() : null;
+        
             const videoLinks = Array.from(videoLinkElements).map(link => link.href);
             const imageUrlObj = imageUrls.find(img => img.showId === (index + 1).toString());
             const imageUrl = imageUrlObj ? imageUrlObj.imageUrl : null;
-
+        
             return {
-                title: titleElement ? titleElement.textContent.trim() : null,
+                title: titleElement ? titleElement.textContent.trim() : (postTitle || null),
                 description: descriptionElement ? descriptionElement.textContent.trim() : null,
                 videoLinks: videoLinks.length > 0 ? videoLinks : [],
                 imageUrl: imageUrl
             };
         });
+        
 
         return results.filter(item => item.title || item.description || item.videoLinks.length > 0 || item.imageUrl);
     } catch (error) {
