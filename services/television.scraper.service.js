@@ -53,7 +53,6 @@ async function fetchShows() {
             };
         });
 
-        console.log(results);
         return results.filter(item => item.title || item.description || item.videoLinks.length > 0 || item.imageUrl);
     } catch (error) {
         console.error('Error fetching shows:', error);
