@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const { JSDOM } = require('jsdom');
+import fetch from 'node-fetch';
+import { JSDOM } from 'jsdom';
 
 const urls = Array.from({ length: 18 }, (_, i) => `https://sstv.ge/show/${i + 1}`);
 const imagePageUrl = 'https://sstv.ge/shows';
@@ -64,4 +64,4 @@ async function fetchShows() {
     }
 }
 
-module.exports = { fetchShows };
+export  { fetchShows };

@@ -1,16 +1,25 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const connection = mongoose.createConnection('mongodb://localhost:27017/ChurchApp', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+const connectDB = async () => {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/ChurchApp', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log("CONNECTED TO DATABASE SUCCESSFULLY");
+    } catch (error) {
+        console.error('COULD NOT CONNECT TO DATABASE:', error.message);
+    }
+};
+
+process.on('SIGINT', async () => {
+    await mongoose.connection.close();
+    console.log('MongoDB connection closed due to application termination');
+    process.exit(0);
 });
 
-connection.on('open', () => {
-    console.log("MongoDB connected");
-});
+const db = mongoose.connection;
 
-connection.on('error', (error) => {
-    console.error("MongoDB connection error:", error);
-});
+export default connectDB;
 
-module.exports = connection;
+export { db };

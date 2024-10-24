@@ -1,5 +1,5 @@
-const UserModel = require('../model/user.model');
-const jwt = require('jsonwebtoken');
+import UserModel from '../model/user.model';
+import { sign } from 'jsonwebtoken';
 
 class UserService{
     static async registerUser(email, password, fullName){
@@ -18,8 +18,8 @@ class UserService{
         }
     }
     static async generateToken(tokenData, secretKey, jwt_expire){
-        return jwt.sign(tokenData, secretKey, {expiresIn: jwt_expire});
+        return sign(tokenData, secretKey, {expiresIn: jwt_expire});
     }
 }
 
-module.exports = UserService;
+export default UserService;

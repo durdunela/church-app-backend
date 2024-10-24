@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors');
+import express, { json } from 'express';
+import cors from 'cors';
 const app = express();
-const db = require('./config/db');
-const UserModel = require('./model/user.model');
-const { fetchShows } = require('./services/television.scraper.service'); // Import the fetchShows function
-const port = 3000;
+import db from './config/db.js';
+import UserModel from './model/user.model.js';
+import { fetchShows } from './services/television.scraper.service.js';
+import { HtmlFetcher } from './services/calendar.scraper.service.js';
+const port = 4000;
 
 app.use(cors());
-app.use(express.json());
+app.use(json());
 
-// Uncomment this if you want to enable database connection
 // db.connect()
 //   .then(() => {
 //     console.log('Database connected successfully');
@@ -17,10 +17,6 @@ app.use(express.json());
 //   .catch((error) => {
 //     console.error('Database connection error:', error);
 //   });
-
-app.get('/', (req, res) => {
-  res.send("Hello World!");
-});
 
 app.post('/users', async (req, res) => {
   try {
@@ -41,6 +37,26 @@ app.get('/api/shows', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch shows' });
   }
 });
+
+app.get('api/calendar', async (req, res) => {
+  const { year, month } = req.query;  
+
+  if (!year || !month) {
+    return res.status(400).json({ error: 'Year and month are required' });
+  }
+
+  try {
+    const data = await HtmlFetcher(year, month); 
+    res.json(data);  
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch calendar data' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

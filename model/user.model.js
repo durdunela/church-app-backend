@@ -1,6 +1,8 @@
-const mongoose = require('mongoose');
-const db = require('../config/db');
-const bcrypt = require('bcryptjs/dist/bcrypt');
+import mongoose from 'mongoose';
+import { db } from '../config/db.js'; 
+
+import pkg from 'bcryptjs/dist/bcrypt.js';
+const { genSalt, hash, compare } = pkg;
 
 const { Schema } = mongoose;
 
@@ -25,8 +27,8 @@ userSchema.pre('save', async function (next) {
     try {
         if (!this.isModified('password')) return next();
 
-        const salt = await bcrypt.genSalt(10);
-        const hashpass = await bcrypt.hash(this.password, salt);
+        const salt = await genSalt(10);
+        const hashpass = await hash(this.password, salt);
 
         this.password = hashpass;
         next();
@@ -37,13 +39,13 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.comparePassword = async function(userPassword){
     try {
-        const isMatch = await bcrypt.compare(userPassword, this.password);
+        const isMatch = await compare(userPassword, this.password);
         return isMatch;
     } catch (error) {
         throw(error);
     }
 }
 
-const UserModel = db.model('user', userSchema);
+const UserModel = db.model('User', userSchema); 
 
-module.exports = UserModel;
+export default UserModel;
