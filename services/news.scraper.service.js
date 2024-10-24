@@ -1,23 +1,23 @@
-const axios = require('axios')
-const cheerio = require('cheerio')
+import axios from "axios";
+import cheerio from "cheerio";
 
-const daily_news_URL = 'https://www.jc.ge/'
+const daily_news_URL = "https://www.jc.ge/";
 
 const fetchData = async () => {
-    try {
-        const { data } = await axios.getAdapter(daily_news_URL);
+  try {
+    const { data } = await axios.getAdapter(daily_news_URL);
 
-        const $ = cheerio.load(data);
+    const $ = cheerio.load(data);
 
-        const articles = [];
+    const articles = [];
 
-        // NEED TO DO
-        $('')
-
-    } catch (error) {
-        console.error('Error fetching data: ', error);
-        throw new Error('Unable to fetch data');
-    }
+    // NEED TO DO
+    $("");
+  } catch (error) {
+    console.error("Error fetching data: ", error);
+    throw new Error("Unable to fetch data");
+  }
 };
 
-module.exports = { fetchData };
+
+export default { fetchData };
