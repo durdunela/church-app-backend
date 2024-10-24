@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
-import db from "./config/db.js";
+import connectDB from "./config/db.js";
 import { config } from "dotenv";
 import authRoutes from "./routes/auth.js";
 import showRoutes from "./routes/show.js";
+import calendarRoutes from "./routes/calendar.js";
 const app = express();
 
 const port = 3000;
@@ -13,9 +14,11 @@ app.use(express.json());
 
 app.use("/api", authRoutes);
 app.use("/api/show", showRoutes);
+app.use("/api/calendar", calendarRoutes);
 
 config();
-db()
+
+connectDB()
   .then(() => {
     try {
       app.listen(port, () => {
